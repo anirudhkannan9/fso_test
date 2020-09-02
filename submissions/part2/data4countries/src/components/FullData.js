@@ -1,27 +1,23 @@
 import React from 'react'
-import { findRenderedDOMComponentWithTag } from 'react-dom/test-utils'
 
 const FullData = ({ fc, ac}) => {
-    console.log('checking filteredcountries from inside FullData after receiving arguments,', fc)
-    console.log('checking allcountries from inside FullData after receiving arguments', ac)
     
     ac = ac.filter(c => c.name===fc[0])
     ac = ac[0]
+    
     if (ac !== undefined) {
         var defined = true
-        var allkeys = Object.keys(ac)
     }
 
     const renderName = (props) => {if (defined) {return props.name}}
     const renderCap = (props) => {if (defined) {return props.capital}}
     const renderPop = (props) => {if (defined) {return props.population}}
     const renderLang = (props) => {if (defined) {
-    return props.languages.map(l => <li key={l.name}>{l.name}</li>)   
-    }
+    return props.languages.map(l => <li key={l.name}>{l.name}</li>)}
 }
     const renderImg = (props) => {if (defined) {
         var flagurl = props.flag
-    return <img src={flagurl} style={{ width: 100}} />
+    return <img src={flagurl} style={{ width: 100}} alt={'flag of'+props.name} />
     }
 }
 
