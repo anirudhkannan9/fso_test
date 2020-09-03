@@ -11,9 +11,7 @@ const CountryNames = ({fc, ac}) => {
         setShowFull(true)
     }
 
-    if (showFull) {
-        return (<FullData fc={fullCountry} ac={ac}/>)
-    }
+    if (showFull) {return (<FullData fc={fullCountry} ac={ac}/>)}
 
     else {
         return (<>{fc.map(c => <>
