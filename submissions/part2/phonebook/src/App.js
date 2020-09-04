@@ -6,11 +6,7 @@ import axios from 'axios'
 
 
 const App = () => {
-  const [persons, setPersons] = useState([
-    { name: 'Arto Hellas', number: '040-123456' },
-    { name: 'Ada Lovelace', number: '39-44-5323523' },
-    { name: 'Dan Abramov', number: '12-43-234345' }
-  ])
+  const [persons, setPersons] = useState([])
   
   const allnames = persons.map(p => p.name)
   const [ newName, setNewName ] = useState('')
@@ -30,21 +26,28 @@ const App = () => {
   console.log('render', persons.length, 'people')
 
   const addPerson = (event) => {
-
     event.preventDefault()
     if (allnames.includes(newName)) {
       alert(`${newName} is already in the phonebook.`)
     } 
 
     else {
-      const personobject = {
+      const personObject = {
         name: newName, number: newNum
       }
-      setPersons(persons.concat(personobject))
+
+      axios
+      .post('http://localhost:3001/persons', personObject)
+      .then(response => {
+      console.log(response)
+      setPersons(persons.concat(response.data))
       setNewName('')
       setNewNum('')
-    }
+    })
+      
+  
   }
+}
 
   const handleNameChange = (event) => {
     setNewName(event.target.value)
