@@ -13,6 +13,7 @@ const App = () => {
   const [ newNum, setNewNum ] = useState('') 
   const [ search, setSearch ] = useState('')
   const [successMessage, setsuccessMessage] = useState(null)
+  const [ failureMessage, setfailureMessage ] = useState(null)
 
   const allnames = persons.map(p => p.name)
   const filteredPersons = persons.filter((p) => p.name.toLowerCase().includes(search.toLowerCase()))
@@ -68,6 +69,10 @@ const App = () => {
         }
           )
         )
+      .catch(error => {
+        setfailureMessage(`The contact "${person.name}" has already been removed from server.`)
+        setTimeout(() => {setfailureMessage(null)}, 5000)
+      })
       }
       setNewNum('')
     }
@@ -97,6 +102,7 @@ const App = () => {
     <div>
       <h2>Phonebook</h2>
       <Notification type='success' message={successMessage}/>
+      <Notification type='fail' message={failureMessage}/>
       Search: <SearchBar
       search={search}
       updateSearch={updateSearch}
