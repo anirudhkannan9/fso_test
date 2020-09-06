@@ -4,6 +4,7 @@ import AddPersonForm from './components/AddPersonForm'
 import SearchBar from './components/SearchBar'
 import axios from 'axios'
 import phonebookService from './services/phonebook'
+import Notification from './components/Notification'
 
 
 const App = () => {
@@ -11,6 +12,7 @@ const App = () => {
   const [ newName, setNewName ] = useState('')
   const [ newNum, setNewNum ] = useState('') 
   const [ search, setSearch ] = useState('')
+  const [successMessage, setsuccessMessage] = useState(null)
 
   const allnames = persons.map(p => p.name)
   const filteredPersons = persons.filter((p) => p.name.toLowerCase().includes(search.toLowerCase()))
@@ -29,7 +31,6 @@ const App = () => {
 
       if (window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)) {
         updateNum()}
-
     } 
 
     else {
@@ -40,10 +41,12 @@ const App = () => {
       phonebookService
       .create(personObject)
       .then(returnedPerson => {
-        setPersons(persons.concat(returnedPerson))
+        setPersons(persons.concat(returnedPerson)) 
         setNewName('')
         setNewNum('')
       })
+      setsuccessMessage(`${newName} added to phonebook.`)
+      setTimeout(() => {setsuccessMessage(null)}, 5000)
     }
   }
 
@@ -78,28 +81,22 @@ const App = () => {
     .then(phonebookService
       .getAll()
       .then(r => {
+        setPersons(r)
         setNewName('')
         setNewNum('')
-        setPersons(r)
-        
       }
         )
       )
-    
-    // const newName = newname
-    // axios
-    // .get('http://localhost:3001/persons')
-    // .then(r => {return r.data
-    // })
-
-    // console.log('outside the promise chain;', r.data)
+    setsuccessMessage(`${update.name} updated`)
+    setTimeout(() => {setsuccessMessage(null)}, 5000)
     
   }
-      
+
 
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification type='success' message={successMessage}/>
       Search: <SearchBar
       search={search}
       updateSearch={updateSearch}
