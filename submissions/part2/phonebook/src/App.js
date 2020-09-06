@@ -8,11 +8,12 @@ import phonebookService from './services/phonebook'
 
 const App = () => {
   const [persons, setPersons] = useState([])
-  
-  const allnames = persons.map(p => p.name)
   const [ newName, setNewName ] = useState('')
   const [ newNum, setNewNum ] = useState('') 
   const [ search, setSearch ] = useState('')
+
+  const allnames = persons.map(p => p.name)
+  var lastperson
 
   useEffect(() => {
     phonebookService
@@ -43,19 +44,28 @@ const App = () => {
     }
   }
 
-  const handleNameChange = (event) => {
-    setNewName(event.target.value)
-  }
+  const handleNameChange = (event) => setNewName(event.target.value)
 
-  const handleNumChange = (event) => {
-    setNewNum(event.target.value)
-  }
-
-
-  const updateSearch = (event) => {
-    setSearch(event.target.value)
-  }
+  const handleNumChange = (event) => setNewNum(event.target.value)
   
+  const updateSearch = (event) => setSearch(event.target.value)
+
+  const handleDelete = (person) => {
+
+    if (window.confirm(`Are you sure you want to delete ${person.name}?`)) {
+      phonebookService
+      .deletePerson(person)
+      .then(phonebookService
+        .getAll()
+        .then(r => {
+          setPersons(r)
+        }
+          )
+        )
+      }
+      setNewNum('')
+    }
+      
   const filteredPersons = persons.filter((p) => p.name.toLowerCase().includes(search.toLowerCase()))
 
   return (
@@ -71,10 +81,11 @@ const App = () => {
       newName={newName}
       handleNameChange={handleNameChange}
       newNum={newNum}
-      handleNumChange={handleNumChange}/>
+      handleNumChange={handleNumChange}
+      />
 
       <h2>Numbers</h2>
-      <Persons filteredPersons={filteredPersons}/>
+      <Persons filteredPersons={filteredPersons} handleDelete={handleDelete}/>
     </div>
   )
 }
