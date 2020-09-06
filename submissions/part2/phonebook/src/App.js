@@ -13,7 +13,7 @@ const App = () => {
   const [ search, setSearch ] = useState('')
 
   const allnames = persons.map(p => p.name)
-  var lastperson
+  const filteredPersons = persons.filter((p) => p.name.toLowerCase().includes(search.toLowerCase()))
 
   useEffect(() => {
     phonebookService
@@ -26,7 +26,10 @@ const App = () => {
   const addPerson = (event) => {
     event.preventDefault()
     if (allnames.includes(newName)) {
-      alert(`${newName} is already in the phonebook.`)
+
+      if (window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)) {
+        updateNum()}
+
     } 
 
     else {
@@ -65,8 +68,34 @@ const App = () => {
       }
       setNewNum('')
     }
+
+  const updateNum = () => {
+    var update = persons.filter(p => p.name===newName)[0]
+    update = {...update, number: newNum}
+
+    phonebookService
+    .updatePerson(update)
+    .then(phonebookService
+      .getAll()
+      .then(r => {
+        setNewName('')
+        setNewNum('')
+        setPersons(r)
+        
+      }
+        )
+      )
+    
+    // const newName = newname
+    // axios
+    // .get('http://localhost:3001/persons')
+    // .then(r => {return r.data
+    // })
+
+    // console.log('outside the promise chain;', r.data)
+    
+  }
       
-  const filteredPersons = persons.filter((p) => p.name.toLowerCase().includes(search.toLowerCase()))
 
   return (
     <div>
