@@ -27,13 +27,13 @@ const App = () => {
 
   const addPerson = (event) => {
     event.preventDefault()
-    if (allnames.includes(newName)) {
+    // if (allnames.includes(newName)) {
 
-      if (window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)) {
-        updateNum()}
-    } 
+    //   // if (window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)) {
+    //   //   updateNum()}
+    // } 
 
-    else {
+     //else {
       const personObject = {
         name: newName, number: newNum
       }
@@ -47,7 +47,7 @@ const App = () => {
       })
       setsuccessMessage(`${newName} added to phonebook.`)
       setTimeout(() => {setsuccessMessage(null)}, 5000)
-    }
+    //}
   }
 
   const handleNameChange = (event) => setNewName(event.target.value)
@@ -76,25 +76,25 @@ const App = () => {
       setNewNum('')
     }
 
-  const updateNum = () => {
-    var update = persons.filter(p => p.name===newName)[0]
-    update = {...update, number: newNum}
+  // const updateNum = () => {
+  //   var update = persons.filter(p => p.name===newName)[0]
+  //   update = {...update, number: newNum}
 
-    phonebookService
-    .updatePerson(update)
-    .then(phonebookService
-      .getAll()
-      .then(r => {
-        setPersons(r)
-        setNewName('')
-        setNewNum('')
-      }
-        )
-      )
-    setsuccessMessage(`${update.name} updated`)
-    setTimeout(() => {setsuccessMessage(null)}, 5000)
+  //   phonebookService
+  //   .updatePerson(update)
+  //   .then(phonebookService
+  //     .getAll()
+  //     .then(r => {
+  //       setPersons(r)
+  //       setNewName('')
+  //       setNewNum('')
+  //     }
+  //       )
+  //     )
+  //   setsuccessMessage(`${update.name} updated`)
+  //   setTimeout(() => {setsuccessMessage(null)}, 5000)
     
-  }
+  // }
 
 
   return (
