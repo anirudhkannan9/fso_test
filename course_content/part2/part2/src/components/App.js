@@ -22,7 +22,7 @@ const App = () => {
   const [notes, setNotes] = useState([])
   const [newNote, setNewNote] = useState('newnote')
   const [showAll, setShowAll] = useState(true)
-  const [errorMessage, setErrorMessage] = useState('some error happened...')
+  const [errorMessage, setErrorMessage] = useState(null)
 
 
   useEffect(() => {
@@ -53,20 +53,20 @@ const toggleImportanceOf = id => {
 
   }
 
-  const addNote = (event) => {
-    event.preventDefault()
-    const noteObject = {
-      content: newNote,
-      date: new Date().toISOString(),
-      important: Math.random() < 0.5,
-    }
+const addNote = (event) => {
+  event.preventDefault()
+  const noteObject = {
+    content: newNote,
+    date: new Date().toISOString(),
+    important: Math.random() < 0.5,
+  }
 
-    noteService
-    .create(noteObject)
-    .then(returnedNote => {
-      setNotes(notes.concat(returnedNote))
-      setNewNote('')
-    })
+  noteService
+  .create(noteObject)
+  .then(returnedNote => {
+    setNotes(notes.concat(returnedNote))
+    setNewNote('')
+  })
 
   }
   
