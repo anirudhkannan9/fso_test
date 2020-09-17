@@ -1,7 +1,2 @@
-POST http://localhost:3001/api/notes
-Content-Type: application/json
+GET http://localhost:3001/api/notes/5f62f2464c4c051fd1d77372
 
-{
-    "content": "VS Code REST client is pretty good", 
-    "important": false
-}
