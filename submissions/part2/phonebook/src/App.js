@@ -23,17 +23,15 @@ const App = () => {
     .then(initialPersons => {
       setPersons(initialPersons)})
     }, [])
-  
 
   const addPerson = (event) => {
     event.preventDefault()
-    // if (allnames.includes(newName)) {
+    if (allnames.includes(newName)) {
+      if (window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)) {
+        updateNum()}
+      } 
 
-    //   // if (window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)) {
-    //   //   updateNum()}
-    // } 
-
-     //else {
+     else {
       const personObject = {
         name: newName, number: newNum
       }
@@ -44,10 +42,18 @@ const App = () => {
         setPersons(persons.concat(returnedPerson)) 
         setNewName('')
         setNewNum('')
+        setsuccessMessage(`${newName} added to phonebook.`)
+        setTimeout(() => {setsuccessMessage(null)}, 5000)
       })
-      setsuccessMessage(`${newName} added to phonebook.`)
-      setTimeout(() => {setsuccessMessage(null)}, 5000)
-    //}
+      .catch(error => {
+        console.log(error.response.data.error)
+        setfailureMessage(error.response.data.error)
+        setTimeout(() => { setfailureMessage(null)}, 5000 )
+      })
+
+      // setsuccessMessage(`${newName} added to phonebook.`)
+      // setTimeout(() => {setsuccessMessage(null)}, 5000)
+    }
   }
 
   const handleNameChange = (event) => setNewName(event.target.value)
@@ -63,9 +69,7 @@ const App = () => {
       .deletePerson(person)
       .then(phonebookService
         .getAll()
-        .then(r => {
-          setPersons(r)
-        }
+        .then(r => {setPersons(r)}
           )
         )
       .catch(error => {
@@ -76,25 +80,42 @@ const App = () => {
       setNewNum('')
     }
 
-  // const updateNum = () => {
-  //   var update = persons.filter(p => p.name===newName)[0]
-  //   update = {...update, number: newNum}
+  const updateNum = () => {
+  var update = persons.filter(p => p.name===newName)[0]
+  update = {...update, number: newNum}
 
-  //   phonebookService
-  //   .updatePerson(update)
-  //   .then(phonebookService
-  //     .getAll()
-  //     .then(r => {
-  //       setPersons(r)
-  //       setNewName('')
-  //       setNewNum('')
-  //     }
-  //       )
-  //     )
-  //   setsuccessMessage(`${update.name} updated`)
-  //   setTimeout(() => {setsuccessMessage(null)}, 5000)
+  if (newNum.length < 8) {
+    //console.log(error.response.data.error)
+    //setfailureMessage(error.response.data.error)
+    setfailureMessage('The new number must be at least 8 digits long.')
+    setTimeout(() => { setfailureMessage(null)}, 5000)
+
+  } else {
+  phonebookService
+  .updatePerson(update)
+  .then(() => {phonebookService
+    .getAll()
+    .then(response => {
+      console.log(response)
+      setPersons(response)
+      setNewName('')
+      setNewNum('')
+      setsuccessMessage(`${update.name} updated`)
+      setTimeout(() => { setsuccessMessage(null)}, 5000)
+    })
+  }
+  )
+  
+}
+  }
+
+  //SETTING OF STATE AFTER UPDATING THE LIST OF PERSONS
+  //setPersons(response)
+    // setNewName('')
+    // setNewNum('')
     
-  // }
+  
+  
 
 
   return (

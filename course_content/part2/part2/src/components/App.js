@@ -6,7 +6,7 @@ import Notification from './Notification'
 
 const Footer = () => {
   const footerStyle = {
-    color: 'green',
+    color: 'blue',
     fontStyle: 'italic',
     fontSize: 16
   }
